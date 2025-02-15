@@ -1,45 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Admin Dashboard</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="doctor/dashboard">Doctors</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Lab Assistants</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Patients</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="{{ url('/logout') }}">Logout</a>
-                </li>
-            </ul>
+@extends('layout.admin')
+
+@section('content')
+    <div class="container mt-4">
+        <h2>Welcome, {{ Auth::user()->first_name }}!</h2>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Doctors</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $totalDoctors }}</h5>
+                        <p class="card-text">Total registered doctors.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Patients</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $totalPatients }}</h5>
+                        <p class="card-text">Total registered patients.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-header">Lab Assistants</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $totalLabAssistants }}</h5>
+                        <p class="card-text">Total registered lab assistants.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-header">Total user</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $totalUsers }}</h5>
+                        <p class="card-text">Total users with admin</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </nav>
-
-    <!-- Dashboard Content -->
-    <div class="container mt-5">
-        <h2>Welcome, {{ $admin->first_name }} {{ $admin->last_name }}</h2>
-        <p>Email: {{ $admin->email }}</p>
-        <p>tp:{{$admin->mobile_number}}</p>
-      
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-</body>
-</html>
+@endsection
