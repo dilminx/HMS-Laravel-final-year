@@ -6,7 +6,12 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\LabAssistantController;
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Auth;
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -17,23 +22,26 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 
 // **Admin Dashboard**
-Route::middleware(['auth'])->group(function () {
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+//     Route::get('/admin/doctors', [AdminController::class, 'doctors'])->name('admin.doctors');
+// });
+
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/doctors', [AdminController::class, 'doctors'])->name('admin.doctors');
 });
 
-// **Patient Dashboard**
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:patient'])->group(function () {
     Route::get('/patient/dashboard', [PatientController::class, 'index'])->name('patient.dashboard');
 });
 
-// **Doctor Dashboard**
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:doctor'])->group(function () {
     Route::get('/doctor/dashboard', [DoctorController::class, 'index'])->name('doctor.dashboard');
 });
 
-// **Lab Assistant Dashboard**
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:lab-assistant'])->group(function () {
     Route::get('/lab/dashboard', [LabAssistantController::class, 'index'])->name('lab.dashboard');
 });
 

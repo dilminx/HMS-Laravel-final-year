@@ -28,9 +28,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
-            // Redirect based on role
-            switch ($user->user_role_iduser_role) {
+        
+            switch ($user->user_role_iduser_role) { // Corrected field name
                 case 1:
                     return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin!');
                 case 2:
@@ -40,9 +39,10 @@ class AuthController extends Controller
                 case 4:
                     return redirect()->route('lab.dashboard')->with('success', 'Welcome Lab Assistant!');
                 default:
-                    return redirect()->route('home')->with('success', 'Login Successful!');
+                    return redirect()->route('welcome')->with('success', 'Login Successful!');
             }
         }
+        
 
         return back()->with('error', 'Invalid email or password');
     }

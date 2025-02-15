@@ -21,9 +21,10 @@ class RoleMiddleware
             'lab-assistant' => 4,
         ];
 
-        // Check if role exists and user role matches
-        if (!isset($roleMapping[$role]) || Auth::user()->user_role_iduser_roles !== $roleMapping[$role]) {
-            return abort(403, 'Unauthorized access');
+        $userRole = Auth::user()->user_role_iduser_role; // Get logged-in user role
+
+        if (!isset($roleMapping[$role]) || $userRole !== $roleMapping[$role]) {
+            return abort(403, 'Unauthorized access'); // Restrict access
         }
 
         return $next($request);
