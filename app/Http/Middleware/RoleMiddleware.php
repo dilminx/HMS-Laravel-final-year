@@ -21,10 +21,16 @@ class RoleMiddleware
             'lab-assistant' => 4,
         ];
 
-        $userRole = Auth::user()->user_role_iduser_role; // Get logged-in user role
+        $user = Auth::user(); // Get the authenticated user
 
-        if (!isset($roleMapping[$role]) || $userRole !== $roleMapping[$role]) {
+        // Check if the provided role exists and matches the user's role
+        if (!isset($roleMapping[$role]) || $user->user_role_iduser_role !== $roleMapping[$role]) {
             return abort(403, 'Unauthorized access'); // Restrict access
+        }
+
+        // Check if the user is inactive (status = 0)
+        if ($user->status == 0) {
+            return redirect()->route('restricted.access');
         }
 
         return $next($request);
