@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctor;
 use App\Models\LabTest;
+use App\Models\MasterUser;
 use Illuminate\Http\Request;
+use App\Models\DoctorCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\MasterUser;
 
 class AdminController extends Controller
 {
@@ -68,11 +70,13 @@ class AdminController extends Controller
         return back()->with('success', 'User status updated successfully!');
     }
 
-    // Show Add User Form
+    //============ Show Add User Form ======================
     public function showAddUserForm()
-    {
-        return view('admin.add-user');
-    }
+{
+    $doctorCategories = DoctorCategory::all(); // Fetch all categories from DB
+    return view('admin.add-user', compact('doctorCategories'));
+}
+
 
     // Add Doctor or Lab Assistant
     public function addUser(Request $request)
@@ -84,9 +88,11 @@ class AdminController extends Controller
             'password' => 'required|min:6',
             'mobile_number' => 'required|string|max:12',
             'role' => 'required|in:2,3,4', //2=patient, 3 = Doctor, 4 = Lab Assistant
+            'doctor_category' => 'required_if:role,3|exists:doctor_category,iddoctor_category' // Only required for doctors
+  
         ]);
 
-        MasterUser::create([
+      $user =  MasterUser::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -94,71 +100,39 @@ class AdminController extends Controller
             'mobile_number' => $request->mobile_number,
             'user_role_iduser_role' => $request->role,
             'status' => 1,
+            
         ]);
+        if ($request->role == 3) {
+            Doctor::create([
+                'master_user_idmaster_user' => $user->idmaster_user,
+                'doctor_category_iddoctor_category' => $request->doctor_category,
+                'specialization' => 'unknown', // Change as needed
+                'work_hospital' => 'Unknown', // Change as needed
+                'status' => 1,
+            ]);
+        }
 
         return redirect()->route('admin.users')->with('success', 'User added successfully!');
     }
+
+
+
+    
     public function viewLabAssistants()
 {
     $labAssistants = MasterUser::where('user_role_iduser_role', 4)->where('status', 1)->get();
     return view('admin.lab-assistants', compact('labAssistants'));
 }
-// ========================view lab test======================
-    public function labTest(){
-        $labTest = LabTest::all();
-        return view('labtest.all',compact('labTest'));
-    }
-    public function createLabtest(){
-        return view('create.labtest');
-    }
-    public function storeLabTest(Request $request){
-        $request->validate(
-            [
-                'labtest_namee' => 'required|string',
-                'labtest_amount' => 'required|numaric|min:0',
-                'status' => "required|in:0,1"
-            ]
-        );
-        LabTest::create([
-            'labtest_name' => $request->labtest_name,
-            'test_amount' => $request->test_amount,
-            'status' => $request->status,
-        ]);
-        return redirect()->route('labTests')->with('success', 'Lab Test added successfully.');
 
+
+   
+
+    public function adminPayment(){
+        return view('admin.payment');
     }
-    public function editLabTest($id)
-    {
-        $labTest = LabTest::findOrFail($id);
-        return view('lab_tests.edit', compact('labTest'));
+    public function adminReport(){
+        return view('admin.report');
     }
 
-    // Update lab test details
-    public function updateLabTest(Request $request, $id)
-    {
-        $request->validate([
-            'labtest_name' => 'required|string|max:255',
-            'test_amount' => 'required|numeric|min:0',
-            'status' => 'required|in:0,1'
-        ]);
-
-        $labTest = LabTest::findOrFail($id);
-        $labTest->update([
-            'labtest_name' => $request->labtest_name,
-            'test_amount' => $request->test_amount,
-            'status' => $request->status,
-        ]);
-
-        return redirect()->route('admin.labTests')->with('success', 'Lab Test updated successfully.');
-    }
-
-    // Delete a lab test
-    public function deleteLabTest($id)
-    {
-        $labTest = LabTest::findOrFail($id);
-        $labTest->delete();
-
-        return redirect()->route('admin.labTests')->with('success', 'Lab Test deleted successfully.');
-    }
 
 }
