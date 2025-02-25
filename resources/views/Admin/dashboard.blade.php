@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3">
-                    <div class="card-header">Doctors</div>
+                    <a  href="{{ route('admin.doctors') }}" class="card-header">Doctors</a>
                     <div class="card-body">
                         <h5 class="card-title">{{ $totalDoctors }}</h5>
                         <p class="card-text">Total registered doctors.</p>

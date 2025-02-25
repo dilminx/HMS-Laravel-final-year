@@ -56,7 +56,7 @@ class AdminController extends Controller
     // Show Users List
     public function manageUsers()
     {
-        $users = MasterUser::where('user_role_iduser_role', '!=', 1)->get();
+        $users = MasterUser::where('user_role_iduser_role', '!=',1)->get();
         return view('admin.users', compact('users'));
     }
 
@@ -76,7 +76,11 @@ class AdminController extends Controller
     $doctorCategories = DoctorCategory::all(); // Fetch all categories from DB
     return view('admin.add-user', compact('doctorCategories'));
 }
-
+//=========================show doctor list==================
+    public function doctorsList(){
+        $doctors = MasterUser::where('user_role_iduser_role', 3)->get();
+        return view('admin.doctors-list',compact('doctors'));
+    }
 
     // Add Doctor or Lab Assistant
     public function addUser(Request $request)
@@ -103,10 +107,13 @@ class AdminController extends Controller
             
         ]);
         if ($request->role == 3) {
+            // Get the selected doctor category
+            $doctorCategory = DoctorCategory::find($request->doctor_category);
+    
             Doctor::create([
                 'master_user_idmaster_user' => $user->idmaster_user,
                 'doctor_category_iddoctor_category' => $request->doctor_category,
-                'specialization' => 'unknown', // Change as needed
+                'specialization' => $doctorCategory ? $doctorCategory->category_doctor : 'Unknown', // Assign category_doctor
                 'work_hospital' => 'Unknown', // Change as needed
                 'status' => 1,
             ]);

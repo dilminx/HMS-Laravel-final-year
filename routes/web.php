@@ -1,12 +1,13 @@
 <?php 
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\PatientController;
-use App\Http\Controllers\DoctorController;
-use App\Http\Controllers\LabAssistantController;
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\LabAssistantController;
 
 // =========================== Home Route ===========================
 Route::get('/', function () {
@@ -30,11 +31,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
     Route::post('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.updateProfile');
-    
-    Route::get('/admin/doctors', [AdminController::class, 'doctors'])->name('admin.doctors');
-    Route::get('/admin/patients', [AdminController::class, 'patients'])->name('admin.patients');
-    Route::get('/admin/lab/lab-assistants', [AdminController::class, 'labAssistants'])->name('admin.labAssistants');
-    
+   
+    Route::get('/admin/doctors-list', [AdminController::class, 'doctorsList'])->name('admin.doctors');
+    Route::get('/admin/user/toggle-status/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggleStatus');
+
+     
     Route::get('/admin/users', [AdminController::class, 'manageUsers'])->name('admin.users');
     Route::post('/admin/toggle-status/{id}', [AdminController::class, 'toggleStatus'])->name('admin.toggleStatus');
     Route::get('/admin/add-user', [AdminController::class, 'showAddUserForm'])->name('admin.addUser');
@@ -52,10 +53,11 @@ Route::middleware(['auth', 'role:patient'])->group(function () {
 // =========================== Doctor Routes ===========================
 Route::middleware(['auth', 'role:doctor'])->group(function () {  
     Route::get('/doctor/dashboard', [DoctorController::class, 'dashboard'])->name('doctor.dashboard');
-    Route::get('/doctor/patients', [DoctorController::class, 'patients'])->name('doctor.patients');
-    Route::get('/doctor/appointments', [DoctorController::class, 'appointments'])->name('doctor.appointments');
-    Route::get('/doctor/set-dates', [DoctorController::class, 'setAvailableDates'])->name('doctor.set-dates');
-    Route::get('/doctor/payments', [DoctorController::class, 'paymentHistory'])->name('doctor.payments');
+    Route::post('/doctor/update/{id}', [DoctorController::class, 'updateProfile'])->name('doctor.update');
+    Route::get('/doctor/appointments', [AppointmentController::class, 'index']);
+    Route::get('/doctor/appointments/fetch', [AppointmentController::class, 'fetchAppointments']);
+    Route::post('/doctor/appointments/store', [AppointmentController::class, 'store']);
+    Route::post('/doctor/appointments/cancel/{id}', [AppointmentController::class, 'cancel']);
 });
 
 // =========================== Lab Assistant Routes ===========================

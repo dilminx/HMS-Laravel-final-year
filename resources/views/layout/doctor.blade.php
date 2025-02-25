@@ -4,76 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
+    <!-- Font Awesome -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Bootstrap CSS (local) -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background: #343a40;
-            color: white;
-            position: fixed;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            color: white;
-            padding: 10px;
-            display: block;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background: #495057;
-        }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
-        }
-    </style>
 </head>
 <body>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h4 class="text-center">Doctor Panel</h4>
-        <a href="#" class="nav-link" data-page="dashboard">🏠 Dashboard</a>
-        <a href="#" class="nav-link" data-page="patients">👨‍⚕️ Find Patient</a>
-        <a href="#" class="nav-link" data-page="appointments">📅 Appointments</a>
-        <a href="#" class="nav-link" data-page="set-dates">📌 Set Available Dates</a>
-        <a href="#" class="nav-link" data-page="payments">💳 Payment History</a>
-    </div>
-
-    <!-- Content Area -->
-    <div class="content">
-        <div id="content-area">
-            <h2>Welcome to Doctor Dashboard</h2>
-            <p>Select an option from the sidebar.</p>
+    <div class="d-flex">
+        {{-- Sidebar --}}
+        <nav class="bg-dark text-white p-3 min-vh-100" style="width: 250px;">
+            <h4><i class="fas fa-user-md"></i> Doctor Panel</h4>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a href="/doctor/dashboard" class="nav-link text-white"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li class="nav-item"><a href="/doctor/appointments" class="nav-link text-white"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
+                <li class="nav-item"><a href="/doctor/patients" class="nav-link text-white"><i class="fas fa-users"></i> Patients</a></li>
+                <li class="nav-item"><a href="/doctor/lab-requests" class="nav-link text-white"><i class="fas fa-vials"></i> Lab Requests</a></li>
+                <li class="nav-item"><a href="/doctor/payments" class="nav-link text-white"><i class="fas fa-file-invoice-dollar"></i> Payments</a></li>
+            </ul>
+        </nav>
+        
+        {{-- Main Content --}}
+        <div class="flex-grow-1 p-4">
+            @yield('content')
         </div>
     </div>
-
-    <!-- jQuery to Load Pages Dynamically -->
-    <script>
-        $(document).ready(function () {
-            $(".nav-link").click(function (e) {
-                e.preventDefault();
-                var page = $(this).data("page");
-
-                $("#content-area").html("<h3>Loading...</h3>");
-
-                $.get("/doctor/" + page, function (data) {
-                    $("#content-area").html(data);
-                });
-            });
-        });
-    </script>
-
-</body>
-</html>
+    
+    <link href="{{ asset('css/toastr.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
+   

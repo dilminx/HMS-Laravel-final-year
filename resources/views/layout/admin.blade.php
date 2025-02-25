@@ -2,12 +2,25 @@
 <html lang="en">
 <head>
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-notify.min.js') }}"></script>
 
-<!-- Bootstrap JS (for dismiss button functionality) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+    a{
+        text-decoration: none;
+        color: white;
+        
+    }
+    a:hover{
+     font-weight: bold;
+     color:aliceblue
+        
+    }
+</style>
 
 </head>
 <body>

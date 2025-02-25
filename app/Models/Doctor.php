@@ -11,7 +11,7 @@ class Doctor extends Model
 
     protected $table = 'doctors';
     protected $primaryKey = 'doctor_id';
-    protected $fillable = ['master_user_idmaster_user', 'doctor_category_iddoctor_category', 'specialization', 'work_hospital', 'status','updated_at','created_at'];
+    protected $fillable = ['master_user_idmaster_user', 'doctor_category_iddoctor_category', 'specialization', 'work_hospital', 'status'];
 
     public function masterUser()
     {

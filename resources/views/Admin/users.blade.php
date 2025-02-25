@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Manage Users</h2>
-    <table class="table table-bordered">
+    <table id="datatable" class="table table-bordered">
         <thead>
             <tr>
                 <th>Name</th>
